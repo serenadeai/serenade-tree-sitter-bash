@@ -154,7 +154,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "variable_assignment"
+          "name": "variable_declaration"
         },
         {
           "type": "SYMBOL",
@@ -182,7 +182,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "while_statement"
+          "name": "while"
         },
         {
           "type": "SYMBOL",
@@ -210,7 +210,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "function_definition"
+          "name": "function"
         }
       ]
     },
@@ -458,7 +458,7 @@
         }
       ]
     },
-    "while_statement": {
+    "while_clause": {
       "type": "SEQ",
       "members": [
         {
@@ -482,6 +482,10 @@
           }
         }
       ]
+    },
+    "while": {
+      "type": "SYMBOL",
+      "name": "while_clause"
     },
     "do_group": {
       "type": "SEQ",
@@ -901,7 +905,11 @@
         }
       ]
     },
-    "function_definition": {
+    "identifier": {
+      "type": "SYMBOL",
+      "name": "word"
+    },
+    "function": {
       "type": "SEQ",
       "members": [
         {
@@ -915,12 +923,8 @@
                   "value": "function"
                 },
                 {
-                  "type": "FIELD",
-                  "name": "name",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "word"
-                  }
+                  "type": "SYMBOL",
+                  "name": "identifier"
                 },
                 {
                   "type": "CHOICE",
@@ -949,12 +953,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "FIELD",
-                  "name": "name",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "word"
-                  }
+                  "type": "SYMBOL",
+                  "name": "identifier"
                 },
                 {
                   "type": "STRING",
@@ -1234,7 +1234,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "variable_assignment"
+                  "name": "variable_declaration"
                 }
               ]
             }
@@ -1293,7 +1293,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "variable_assignment"
+                  "name": "variable_declaration"
                 },
                 {
                   "type": "SYMBOL",
@@ -1364,25 +1364,29 @@
       "type": "SYMBOL",
       "name": "_literal"
     },
-    "variable_assignment": {
+    "assignment_variable": {
+      "type": "FIELD",
+      "name": "identifier",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "variable_name"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "subscript"
+          }
+        ]
+      }
+    },
+    "assignment": {
       "type": "SEQ",
       "members": [
         {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "variable_name"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "subscript"
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "assignment_variable"
         },
         {
           "type": "CHOICE",
@@ -1399,7 +1403,7 @@
         },
         {
           "type": "FIELD",
-          "name": "value",
+          "name": "assignment_value",
           "content": {
             "type": "CHOICE",
             "members": [
@@ -1419,6 +1423,14 @@
           }
         }
       ]
+    },
+    "variable_declaration": {
+      "type": "FIELD",
+      "name": "assignment_list",
+      "content": {
+        "type": "SYMBOL",
+        "name": "assignment"
+      }
     },
     "subscript": {
       "type": "SEQ",

@@ -86,23 +86,21 @@ module.exports = grammar({
 
     statement_: $ => choice(
       $.redirected_statement,
-      $.variable_assignment,
+      $.variable_declaration,
       $.command,
       $.declaration_command,
       $.unset_command,
       $.test_command,
       $.negated_command,
       $.for,
-      // $.for_statement,
-      // $.c_style_for_statement,
-      $.while_statement,
+      $.while,
       $.if,
       $.case_statement,
       $.pipeline,
       $.list,
       $.subshell,
       $.enclosed_body,
-      $.function_definition
+      $.function
     ),
 
     redirected_statement: $ => prec(-1, seq(
@@ -136,13 +134,10 @@ module.exports = grammar({
       'for',
       '((',
       optional_with_placeholder('block_initializer_optional', alias($.expression_, $.block_initializer)), 
-      // field('initializer', optional($.expression_)),
       $._terminator,
       optional_with_placeholder('condition_optional', alias($.expression_, $.condition)), 
-      // field('condition', optional($.expression_)),
       $._terminator,
       optional_with_placeholder('block_update_optional', alias($.expression_, $.block_update)), 
-      // field('update', optional($.expression_)),
       '))',
       optional(';'),
       field('enclosed_body', choice(
@@ -151,11 +146,13 @@ module.exports = grammar({
       ))
     ),
 
-    while_statement: $ => seq(
+    while_clause: $ => seq(
       'while',
       field('condition', $.terminated_statement_),
       field('enclosed_body', $.do_group)
     ),
+
+    while: $ => $.while_clause, 
 
     do_group: $ => seq(
       'do',
@@ -221,15 +218,18 @@ module.exports = grammar({
       optional(prec(1, ';;'))
     ),
 
-    function_definition: $ => seq(
+    // Only used for functions.
+    identifier: $ => $.word,
+
+    function: $ => seq(
       choice(
         seq(
           'function',
-          field('name', $.word),
+          $.identifier,
           optional(seq('(', ')'))
         ),
         seq(
-          field('name', $.word),
+          $.identifier,
           '(', ')'
         )
       ),
@@ -290,7 +290,7 @@ module.exports = grammar({
       repeat(choice(
         $._literal,
         $._simple_variable_name,
-        $.variable_assignment
+        $.variable_declaration
       ))
     )),
 
@@ -304,7 +304,7 @@ module.exports = grammar({
 
     command: $ => prec.left(seq(
       repeat(choice(
-        $.variable_assignment,
+        $.variable_declaration,
         $.file_redirect
       )),
       field('name', $.command_name),
@@ -319,21 +319,25 @@ module.exports = grammar({
 
     command_name: $ => $._literal,
 
-    variable_assignment: $ => seq(
-      field('name', choice(
-        $.variable_name,
-        $.subscript
-      )),
+    assignment_variable: $ => field('identifier', choice(
+      $.variable_name,
+      $.subscript
+    )),
+
+    assignment: $ => seq(
+      $.assignment_variable, 
       choice(
         '=',
         '+='
       ),
-      field('value', choice(
+      field('assignment_value', choice(
         $._literal,
         $.array,
         $._empty_value
       ))
     ),
+
+    variable_declaration: $ => field('assignment_list', $.assignment),
 
     subscript: $ => seq(
       field('name', $.variable_name),
