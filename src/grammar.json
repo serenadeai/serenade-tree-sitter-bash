@@ -125,7 +125,7 @@
         "name": "statement"
       }
     },
-    "_terminated_statement": {
+    "terminated_statement_": {
       "type": "SEQ",
       "members": [
         {
@@ -423,7 +423,7 @@
           "name": "condition",
           "content": {
             "type": "SYMBOL",
-            "name": "_terminated_statement"
+            "name": "terminated_statement_"
           }
         },
         {
@@ -473,7 +473,7 @@
           "name": "condition",
           "content": {
             "type": "SYMBOL",
-            "name": "_terminated_statement"
+            "name": "terminated_statement_"
           }
         },
         {
@@ -526,7 +526,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_terminated_statement"
+          "name": "terminated_statement_"
         },
         {
           "type": "STRING",

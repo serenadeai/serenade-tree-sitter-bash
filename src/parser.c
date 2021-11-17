@@ -121,7 +121,7 @@ enum {
   sym_statement = 102,
   sym_statements_ = 103,
   aux_sym__statements2 = 104,
-  sym__terminated_statement = 105,
+  sym_terminated_statement_ = 105,
   sym_statement_ = 106,
   sym_redirected_statement = 107,
   sym_for_statement = 108,
@@ -289,7 +289,7 @@ static const char * const ts_symbol_names[] = {
   [sym_statement] = "statement",
   [sym_statements_] = "statements_",
   [aux_sym__statements2] = "_statements2",
-  [sym__terminated_statement] = "_terminated_statement",
+  [sym_terminated_statement_] = "terminated_statement_",
   [sym_statement_] = "statement_",
   [sym_redirected_statement] = "redirected_statement",
   [sym_for_statement] = "for_statement",
@@ -457,7 +457,7 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_statement] = sym_statement,
   [sym_statements_] = sym_statements_,
   [aux_sym__statements2] = aux_sym__statements2,
-  [sym__terminated_statement] = sym__terminated_statement,
+  [sym_terminated_statement_] = sym_terminated_statement_,
   [sym_statement_] = sym_statement_,
   [sym_redirected_statement] = sym_redirected_statement,
   [sym_for_statement] = sym_for_statement,
@@ -940,8 +940,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = false,
   },
-  [sym__terminated_statement] = {
-    .visible = false,
+  [sym_terminated_statement_] = {
+    .visible = true,
     .named = true,
   },
   [sym_statement_] = {
@@ -19098,7 +19098,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [139] = {
-    [sym__terminated_statement] = STATE(3254),
+    [sym_terminated_statement_] = STATE(3254),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19172,7 +19172,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [140] = {
-    [sym__terminated_statement] = STATE(3204),
+    [sym_terminated_statement_] = STATE(3204),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19246,7 +19246,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [141] = {
-    [sym__terminated_statement] = STATE(3151),
+    [sym_terminated_statement_] = STATE(3151),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19320,7 +19320,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [142] = {
-    [sym__terminated_statement] = STATE(3340),
+    [sym_terminated_statement_] = STATE(3340),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19394,7 +19394,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [143] = {
-    [sym__terminated_statement] = STATE(3447),
+    [sym_terminated_statement_] = STATE(3447),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19468,7 +19468,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [144] = {
-    [sym__terminated_statement] = STATE(3348),
+    [sym_terminated_statement_] = STATE(3348),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -19542,7 +19542,7 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_variable_name] = ACTIONS(111),
   },
   [145] = {
-    [sym__terminated_statement] = STATE(3289),
+    [sym_terminated_statement_] = STATE(3289),
     [sym_statement_] = STATE(1713),
     [sym_redirected_statement] = STATE(1973),
     [sym_for_statement] = STATE(1973),
@@ -132177,7 +132177,7 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [7649] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2234),
   [7651] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2129),
   [7653] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2214),
-  [7655] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym__terminated_statement, 2),
+  [7655] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_terminated_statement_, 2),
   [7657] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2124),
   [7659] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2118),
   [7661] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2237),

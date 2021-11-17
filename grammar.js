@@ -15,11 +15,9 @@ module.exports = grammar({
   name: 'bash',
 
   inline: $ => [
-    // $.statement_,
     $._terminator,
     $._literal,
     $._statements2,
-    // $.primary_expression_,
     $._simple_variable_name,
     $._special_variable_name,
   ],
@@ -48,21 +46,16 @@ module.exports = grammar({
   ],
 
   supertypes: $ => [
-    // $.statement_,
-    // $.expression_,
-    // $.primary_expression_,
   ],
 
   conflicts: $ => [
     [$.statement_, $.command]
-    // `statement_`, `command`
   ],
 
   word: $ => $.word,
 
   rules: {
     program: $ => optional_with_placeholder('statement_list', $.statements_), 
-    // optional($.statements_),
 
     statement: $ => seq(
       $.statement_,
@@ -80,13 +73,9 @@ module.exports = grammar({
     )),
 
     _statements2: $ => repeat1($.statement), 
-    // seq(
-    //   $.statement_,
-    //   optional(seq('\n', $.heredoc_body)),
-    //   $._terminator
-    // )),
 
-    _terminated_statement: $ => seq(
+
+    terminated_statement_: $ => seq(
       $.statement_,
       $._terminator
     ),
@@ -151,7 +140,7 @@ module.exports = grammar({
 
     while_statement: $ => seq(
       'while',
-      field('condition', $._terminated_statement),
+      field('condition', $.terminated_statement_),
       field('body', $.do_group)
     ),
 
@@ -163,7 +152,7 @@ module.exports = grammar({
 
     if_statement: $ => seq(
       'if',
-      field('condition', $._terminated_statement),
+      field('condition', $.terminated_statement_),
       'then',
       optional($._statements2),
       repeat($.elif_clause),
@@ -173,7 +162,7 @@ module.exports = grammar({
 
     elif_clause: $ => seq(
       'elif',
-      $._terminated_statement,
+      $.terminated_statement_,
       'then',
       optional($._statements2)
     ),
