@@ -61,24 +61,30 @@ module.exports = grammar({
   word: $ => $.word,
 
   rules: {
-    program: $ => optional($._statements),
+    program: $ => optional_with_placeholder('statement_list', $.statements_), 
+    // optional($.statements_),
 
-    _statements: $ => prec(1, seq(
-      repeat(seq(
-        $.statement_,
-        optional(seq('\n', $.heredoc_body)),
-        $._terminator
-      )),
-      $.statement_,
-      optional(seq('\n', $.heredoc_body)),
-      optional($._terminator)
-    )),
-
-    _statements2: $ => repeat1(seq(
+    statement: $ => seq(
       $.statement_,
       optional(seq('\n', $.heredoc_body)),
       $._terminator
+    ),
+
+    statements_: $ => prec(1, seq(
+      repeat($.statement),
+      field('last_statement', seq(
+        $.statement_,
+        optional(seq('\n', $.heredoc_body)),
+        optional($._terminator)
+      )),
     )),
+
+    _statements2: $ => repeat1($.statement), 
+    // seq(
+    //   $.statement_,
+    //   optional(seq('\n', $.heredoc_body)),
+    //   $._terminator
+    // )),
 
     _terminated_statement: $ => seq(
       $.statement_,
@@ -194,7 +200,7 @@ module.exports = grammar({
       field('value', $._literal),
       repeat(seq('|', field('value', $._literal))),
       ')',
-      optional($._statements),
+      optional($.statements_),
       prec(1, choice(
         field('termination', ';;'),
         field('fallthrough', choice(';&', ';;&'))
@@ -205,7 +211,7 @@ module.exports = grammar({
       field('value', $._literal),
       repeat(seq('|', field('value', $._literal))),
       ')',
-      optional($._statements),
+      optional($.statements_),
       optional(prec(1, ';;'))
     ),
 
@@ -238,7 +244,7 @@ module.exports = grammar({
 
     subshell: $ => seq(
       '(',
-      $._statements,
+      $.statements_,
       ')'
     ),
 
@@ -523,14 +529,14 @@ module.exports = grammar({
     ),
 
     command_substitution: $ => choice(
-      seq('$(', $._statements, ')'),
+      seq('$(', $.statements_, ')'),
       seq('$(', $.file_redirect, ')'),
-      prec(1, seq('`', $._statements, '`'))
+      prec(1, seq('`', $.statements_, '`'))
     ),
 
     process_substitution: $ => seq(
       choice('<(', '>('),
-      $._statements,
+      $.statements_,
       ')'
     ),
 

@@ -216,15 +216,11 @@
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statements_",
           "named": true
         }
       ]
@@ -352,7 +348,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
@@ -360,11 +356,7 @@
           "named": true
         },
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statements_",
           "named": true
         }
       ]
@@ -379,11 +371,7 @@
       "required": false,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statement",
           "named": true
         }
       ]
@@ -444,11 +432,7 @@
       "required": false,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statement",
           "named": true
         }
       ]
@@ -463,7 +447,7 @@
       "required": true,
       "types": [
         {
-          "type": "heredoc_body",
+          "type": "statement",
           "named": true
         },
         {
@@ -482,11 +466,7 @@
       "required": false,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statement",
           "named": true
         }
       ]
@@ -791,11 +771,7 @@
           "named": true
         },
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statement",
           "named": true
         }
       ]
@@ -936,15 +912,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statements_",
           "named": true
         }
       ]
@@ -953,20 +925,17 @@
   {
     "type": "program",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
-          "named": true
-        }
-      ]
+    "fields": {
+      "statement_list": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "statements_",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1017,6 +986,25 @@
         },
         {
           "type": "variable_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "heredoc_body",
+          "named": true
+        },
+        {
+          "type": "statement_",
           "named": true
         }
       ]
@@ -1096,6 +1084,52 @@
         },
         {
           "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "statements_",
+    "named": true,
+    "fields": {
+      "last_statement": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "\n",
+            "named": false
+          },
+          {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": ";;",
+            "named": false
+          },
+          {
+            "type": "heredoc_body",
+            "named": true
+          },
+          {
+            "type": "statement_",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "statement",
           "named": true
         }
       ]
@@ -1182,15 +1216,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "heredoc_body",
-          "named": true
-        },
-        {
-          "type": "statement_",
+          "type": "statements_",
           "named": true
         }
       ]
