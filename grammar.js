@@ -15,11 +15,11 @@ module.exports = grammar({
   name: 'bash',
 
   inline: $ => [
-    $._statement,
+    // $.statement_,
     $._terminator,
     $._literal,
     $._statements2,
-    $._primary_expression,
+    // $.primary_expression_,
     $._simple_variable_name,
     $._special_variable_name,
   ],
@@ -48,9 +48,14 @@ module.exports = grammar({
   ],
 
   supertypes: $ => [
-    $._statement,
-    $._expression,
-    $._primary_expression,
+    // $.statement_,
+    // $.expression_,
+    // $.primary_expression_,
+  ],
+
+  conflicts: $ => [
+    [$.statement_, $.command]
+    // `statement_`, `command`
   ],
 
   word: $ => $.word,
@@ -60,29 +65,29 @@ module.exports = grammar({
 
     _statements: $ => prec(1, seq(
       repeat(seq(
-        $._statement,
+        $.statement_,
         optional(seq('\n', $.heredoc_body)),
         $._terminator
       )),
-      $._statement,
+      $.statement_,
       optional(seq('\n', $.heredoc_body)),
       optional($._terminator)
     )),
 
     _statements2: $ => repeat1(seq(
-      $._statement,
+      $.statement_,
       optional(seq('\n', $.heredoc_body)),
       $._terminator
     )),
 
     _terminated_statement: $ => seq(
-      $._statement,
+      $.statement_,
       $._terminator
     ),
 
     // Statements
 
-    _statement: $ => choice(
+    statement_: $ => choice(
       $.redirected_statement,
       $.variable_assignment,
       $.command,
@@ -103,7 +108,7 @@ module.exports = grammar({
     ),
 
     redirected_statement: $ => prec(-1, seq(
-      field('body', $._statement),
+      field('body', $.statement_),
       field('redirect', repeat1(choice(
         $.file_redirect,
         $.heredoc_redirect,
@@ -125,11 +130,11 @@ module.exports = grammar({
     c_style_for_statement: $ => seq(
       'for',
       '((',
-      field('initializer', optional($._expression)),
+      field('initializer', optional($.expression_)),
       $._terminator,
-      field('condition', optional($._expression)),
+      field('condition', optional($.expression_)),
       $._terminator,
-      field('update', optional($._expression)),
+      field('update', optional($.expression_)),
       '))',
       optional(';'),
       field('body', choice(
@@ -238,15 +243,15 @@ module.exports = grammar({
     ),
 
     pipeline: $ => prec.left(1, seq(
-      $._statement,
+      $.statement_,
       choice('|', '|&'),
-      $._statement
+      $.statement_
     )),
 
     list: $ => prec.left(-1, seq(
-      $._statement,
+      $.statement_,
       choice('&&', '||'),
-      $._statement
+      $.statement_
     )),
 
     // Commands
@@ -262,9 +267,9 @@ module.exports = grammar({
 
     test_command: $ => seq(
       choice(
-        seq('[', $._expression, ']'),
-        seq('[[', $._expression, ']]'),
-        seq('((', $._expression, '))')
+        seq('[', $.expression_, ']'),
+        seq('[[', $.expression_, ']]'),
+        seq('((', $.expression_, '))')
       )
     ),
 
@@ -359,7 +364,7 @@ module.exports = grammar({
 
     // Expressions
 
-    _expression: $ => choice(
+    expression_: $ => choice(
       $._literal,
       $.unary_expression,
       $.ternary_expression,
@@ -370,7 +375,7 @@ module.exports = grammar({
 
     binary_expression: $ => prec.left(choice(
       seq(
-        field('left', $._expression),
+        field('left', $.expression_),
         field('operator', choice(
           '=', '==', '=~', '!=',
           '+', '-', '+=', '-=',
@@ -378,10 +383,10 @@ module.exports = grammar({
           '||', '&&',
           $.test_operator
         )),
-        field('right', $._expression)
+        field('right', $.expression_)
       ),
       seq(
-        field('left', $._expression),
+        field('left', $.expression_),
         field('operator', choice('==', '=~')),
         field('right', $.regex)
       )
@@ -389,27 +394,27 @@ module.exports = grammar({
 
     ternary_expression: $ => prec.left(
       seq(
-        field('condition', $._expression),
+        field('condition', $.expression_),
         '?',
-        field('consequence', $._expression),
+        field('consequence', $.expression_),
         ':',
-        field('alternative', $._expression),
+        field('alternative', $.expression_),
       )
     ),
 
     unary_expression: $ => prec.right(seq(
       choice('!', $.test_operator),
-      $._expression
+      $.expression_
     )),
 
     postfix_expression: $ => seq(
-      $._expression,
+      $.expression_,
       choice('++', '--'),
     ),
 
     parenthesized_expression: $ => seq(
       '(',
-      $._expression,
+      $.expression_,
       ')'
     ),
 
@@ -417,11 +422,11 @@ module.exports = grammar({
 
     _literal: $ => choice(
       $.concatenation,
-      $._primary_expression,
+      $.primary_expression_,
       alias(prec(-2, repeat1($._special_character)), $.word)
     ),
 
-    _primary_expression: $ => choice(
+    primary_expression_: $ => choice(
       $.word,
       $.string,
       $.raw_string,
@@ -435,13 +440,13 @@ module.exports = grammar({
 
     concatenation: $ => prec(-1, seq(
       choice(
-        $._primary_expression,
+        $.primary_expression_,
         $._special_character,
       ),
       repeat1(prec(-1, seq(
         $._concat,
         choice(
-          $._primary_expression,
+          $.primary_expression_,
           $._special_character,
         )
       ))),
@@ -549,4 +554,8 @@ module.exports = grammar({
 function noneOf(...characters) {
   const negatedString = characters.map(c => c == '\\' ? '\\\\' : c).join('')
   return new RegExp('[^' + negatedString + ']')
+}
+
+function optional_with_placeholder(field_name, rule) {
+  return choice(field(field_name, rule), field(field_name, blank()));
 }
