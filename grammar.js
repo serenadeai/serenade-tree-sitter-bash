@@ -72,8 +72,10 @@ module.exports = grammar({
       )),
     )),
 
+    // We need the inlined variant in certain contexts.
     _statements2: $ => repeat1($.statement), 
 
+    statement_list: $=> repeat1($.statement),
 
     terminated_statement_: $ => seq(
       $.statement_,
@@ -93,12 +95,12 @@ module.exports = grammar({
       $.for_statement,
       $.c_style_for_statement,
       $.while_statement,
-      $.if_statement,
+      $.if,
       $.case_statement,
       $.pipeline,
       $.list,
       $.subshell,
-      $.compound_statement,
+      $.enclosed_body,
       $.function_definition
     ),
 
@@ -134,7 +136,7 @@ module.exports = grammar({
       optional(';'),
       field('body', choice(
         $.do_group,
-        $.compound_statement
+        $.enclosed_body
       ))
     ),
 
@@ -150,26 +152,30 @@ module.exports = grammar({
       'done'
     ),
 
-    if_statement: $ => seq(
-      'if',
-      field('condition', $.terminated_statement_),
-      'then',
-      optional($._statements2),
-      repeat($.elif_clause),
-      optional($.else_clause),
+    if: $ => seq(
+      $.if_clause, 
+      optional_with_placeholder('else_if_clause_list', repeat($.else_if_clause)), 
+      optional_with_placeholder('else_clause_optional', $.else_clause),
       'fi'
     ),
 
-    elif_clause: $ => seq(
-      'elif',
-      $.terminated_statement_,
+    if_clause: $ => seq(
+      'if', 
+      field('condition', $.terminated_statement_),
       'then',
-      optional($._statements2)
+      optional_with_placeholder('statement_list', $.statement_list),
+    ),
+
+    else_if_clause: $ => seq(
+      'elif',
+      field('condition', $.terminated_statement_),
+      'then',
+      optional_with_placeholder('statement_list', $.statement_list),
     ),
 
     else_clause: $ => seq(
       'else',
-      optional($._statements2)
+      optional_with_placeholder('statement_list', $.statement_list)
     ),
 
     case_statement: $ => seq(
@@ -219,15 +225,15 @@ module.exports = grammar({
       field(
         'body',
         choice(
-          $.compound_statement,
+          $.enclosed_body,
           $.subshell,
           $.test_command)
       )
     ),
 
-    compound_statement: $ => seq(
+    enclosed_body: $ => seq(
       '{',
-      optional($._statements2),
+      optional_with_placeholder('statement_list', $.statement_list),
       '}'
     ),
 
