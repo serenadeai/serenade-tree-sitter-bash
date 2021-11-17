@@ -511,6 +511,10 @@
           "named": true
         },
         {
+          "type": "expression_",
+          "named": true
+        },
+        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -604,7 +608,7 @@
     "type": "else_if_clause",
     "named": true,
     "fields": {
-      "condition": {
+      "condition_": {
         "multiple": false,
         "required": true,
         "types": [
@@ -1017,7 +1021,7 @@
     "type": "if_clause",
     "named": true,
     "fields": {
-      "condition": {
+      "condition_": {
         "multiple": false,
         "required": true,
         "types": [
@@ -1559,7 +1563,7 @@
       "required": true,
       "types": [
         {
-          "type": "expression_",
+          "type": "condition",
           "named": true
         }
       ]

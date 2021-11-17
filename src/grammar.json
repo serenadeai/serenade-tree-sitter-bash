@@ -585,7 +585,7 @@
         },
         {
           "type": "FIELD",
-          "name": "condition",
+          "name": "condition_",
           "content": {
             "type": "SYMBOL",
             "name": "terminated_statement_"
@@ -626,7 +626,7 @@
         },
         {
           "type": "FIELD",
-          "name": "condition",
+          "name": "condition_",
           "content": {
             "type": "SYMBOL",
             "name": "terminated_statement_"
@@ -1127,6 +1127,10 @@
         }
       ]
     },
+    "condition": {
+      "type": "SYMBOL",
+      "name": "expression_"
+    },
     "test_command": {
       "type": "SEQ",
       "members": [
@@ -1142,7 +1146,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "expression_"
+                  "name": "condition"
                 },
                 {
                   "type": "STRING",
@@ -1159,7 +1163,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "expression_"
+                  "name": "condition"
                 },
                 {
                   "type": "STRING",
@@ -1176,7 +1180,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "expression_"
+                  "name": "condition"
                 },
                 {
                   "type": "STRING",

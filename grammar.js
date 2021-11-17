@@ -167,16 +167,17 @@ module.exports = grammar({
       'fi'
     ),
 
+    // conditions are not tagged here, since they are caught inside test_command
     if_clause: $ => seq(
       'if', 
-      field('condition', $.terminated_statement_),
+      field('condition_', $.terminated_statement_),
       'then',
       optional_with_placeholder('statement_list', $.statement_list),
     ),
 
     else_if_clause: $ => seq(
       'elif',
-      field('condition', $.terminated_statement_),
+      field('condition_', $.terminated_statement_),
       'then',
       optional_with_placeholder('statement_list', $.statement_list),
     ),
@@ -276,12 +277,14 @@ module.exports = grammar({
         $.subshell
       )
     ),
+    
+    condition: $ => $.expression_,
 
     test_command: $ => seq(
       choice(
-        seq('[', $.expression_, ']'),
-        seq('[[', $.expression_, ']]'),
-        seq('((', $.expression_, '))')
+        seq('[', $.condition, ']'),
+        seq('[[', $.condition, ']]'),
+        seq('((', $.condition, '))')
       )
     ),
 
