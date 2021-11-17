@@ -119,53 +119,112 @@
     }
   },
   {
-    "type": "c_style_for_statement",
+    "type": "block_collection",
     "named": true,
-    "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "do_group",
-            "named": true
-          },
-          {
-            "type": "enclosed_body",
-            "named": true
-          }
-        ]
-      },
-      "condition": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression_",
-            "named": true
-          }
-        ]
-      },
-      "initializer": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression_",
-            "named": true
-          }
-        ]
-      },
-      "update": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression_",
-            "named": true
-          }
-        ]
-      }
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "concatenation",
+          "named": true
+        },
+        {
+          "type": "primary_expression_",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block_initializer",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "concatenation",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "primary_expression_",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block_update",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "concatenation",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "primary_expression_",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -378,6 +437,49 @@
     }
   },
   {
+    "type": "condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "concatenation",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "primary_expression_",
+          "named": true
+        },
+        {
+          "type": "ternary_expression",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "declaration_command",
     "named": true,
     "fields": {},
@@ -411,16 +513,17 @@
   {
     "type": "do_group",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "statement",
-          "named": true
-        }
-      ]
+    "fields": {
+      "statement_list": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "statement_list",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -598,10 +701,89 @@
     }
   },
   {
-    "type": "for_statement",
+    "type": "for",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "for_clause",
+          "named": true
+        },
+        {
+          "type": "for_each_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_clause",
     "named": true,
     "fields": {
-      "body": {
+      "block_initializer_optional": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block_initializer",
+            "named": true
+          }
+        ]
+      },
+      "block_update_optional": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block_update",
+            "named": true
+          }
+        ]
+      },
+      "condition_optional": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "condition",
+            "named": true
+          }
+        ]
+      },
+      "enclosed_body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "do_group",
+            "named": true
+          },
+          {
+            "type": "enclosed_body",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "for_each_clause",
+    "named": true,
+    "fields": {
+      "block_iterator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "variable_name",
+            "named": true
+          }
+        ]
+      },
+      "enclosed_body": {
         "multiple": false,
         "required": true,
         "types": [
@@ -611,31 +793,17 @@
           }
         ]
       },
-      "value": {
+      "for_each_separator": {
         "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "concatenation",
+            "type": "block_collection",
             "named": true
           },
           {
-            "type": "primary_expression_",
-            "named": true
-          },
-          {
-            "type": "word",
-            "named": true
-          }
-        ]
-      },
-      "variable": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "variable_name",
-            "named": true
+            "type": "in",
+            "named": false
           }
         ]
       }
@@ -1040,10 +1208,6 @@
       "required": true,
       "types": [
         {
-          "type": "c_style_for_statement",
-          "named": true
-        },
-        {
           "type": "case_statement",
           "named": true
         },
@@ -1060,7 +1224,7 @@
           "named": true
         },
         {
-          "type": "for_statement",
+          "type": "for",
           "named": true
         },
         {
@@ -1420,22 +1584,22 @@
     "type": "while_statement",
     "named": true,
     "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "do_group",
-            "named": true
-          }
-        ]
-      },
       "condition": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "terminated_statement_",
+            "named": true
+          }
+        ]
+      },
+      "enclosed_body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "do_group",
             "named": true
           }
         ]

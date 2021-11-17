@@ -92,8 +92,9 @@ module.exports = grammar({
       $.unset_command,
       $.test_command,
       $.negated_command,
-      $.for_statement,
-      $.c_style_for_statement,
+      $.for,
+      // $.for_statement,
+      // $.c_style_for_statement,
       $.while_statement,
       $.if,
       $.case_statement,
@@ -113,28 +114,38 @@ module.exports = grammar({
       )))
     )),
 
-    for_statement: $ => seq(
-      'for',
-      field('variable', $._simple_variable_name),
-      optional(seq(
-        'in',
-        field('value', repeat1($._literal))
-      )),
-      $._terminator,
-      field('body', $.do_group)
+    for: $ => choice(
+      $.for_clause, 
+      $.for_each_clause
     ),
 
-    c_style_for_statement: $ => seq(
+    block_collection: $ => repeat1($._literal),
+
+    for_each_clause: $ => seq(
+      'for',
+      field('block_iterator', $._simple_variable_name),
+      optional(field('for_each_separator', seq(
+        'in',
+        $.block_collection
+      ))),
+      $._terminator,
+      field('enclosed_body', $.do_group)
+    ),
+
+    for_clause: $ => seq(
       'for',
       '((',
-      field('initializer', optional($.expression_)),
+      optional_with_placeholder('block_initializer_optional', alias($.expression_, $.block_initializer)), 
+      // field('initializer', optional($.expression_)),
       $._terminator,
-      field('condition', optional($.expression_)),
+      optional_with_placeholder('condition_optional', alias($.expression_, $.condition)), 
+      // field('condition', optional($.expression_)),
       $._terminator,
-      field('update', optional($.expression_)),
+      optional_with_placeholder('block_update_optional', alias($.expression_, $.block_update)), 
+      // field('update', optional($.expression_)),
       '))',
       optional(';'),
-      field('body', choice(
+      field('enclosed_body', choice(
         $.do_group,
         $.enclosed_body
       ))
@@ -143,12 +154,12 @@ module.exports = grammar({
     while_statement: $ => seq(
       'while',
       field('condition', $.terminated_statement_),
-      field('body', $.do_group)
+      field('enclosed_body', $.do_group)
     ),
 
     do_group: $ => seq(
       'do',
-      optional($._statements2),
+      optional_with_placeholder('statement_list', $.statement_list),
       'done'
     ),
 
