@@ -448,7 +448,7 @@ module.exports = grammar({
           field("special_variable_name1", $._special_variable_name),
           alias("!", $.special_variable_name2),
           alias("#", $.special_variable_name3)
-        )
+        ) 
       ),
 
     string_expansion: ($) => seq("$", choice($.string, $.raw_string)),
