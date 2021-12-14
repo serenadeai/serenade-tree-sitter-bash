@@ -294,7 +294,7 @@ module.exports = grammar({
     file_redirect: ($) =>
       prec.left(
         seq(
-          field("descriptor", optional($.file_descriptor)),
+          optional($.file_descriptor), //descriptor
           choice("<", ">", ">>", "&>", "&>>", "<&", ">&", ">|"),
           field("destination", $._literal)
         )
@@ -353,12 +353,12 @@ module.exports = grammar({
                 $.test_operator
               )
             ),
-            field("right", $.expression_)
+            $.expression_ // right
           ),
           seq(
             field("left", $.expression_),
             field("operator", choice("==", "=~")),
-            field("right", $.regex)
+            $.regex // right
           )
         )
       ),
@@ -386,7 +386,7 @@ module.exports = grammar({
       choice(
         $.concatenation,
         $.primary_expression_,
-        alias(prec(-2, repeat1($._special_character)), $.word)
+        prec(-2, repeat1($.special_character_))
       ),
 
     primary_expression_: ($) =>
@@ -406,13 +406,13 @@ module.exports = grammar({
       prec(
         -1,
         seq(
-          choice($.primary_expression_, $._special_character),
-          repeat1(prec(-1, seq($._concat, choice($.primary_expression_, $._special_character)))),
+          choice($.primary_expression_, $.special_character_),
+          repeat1(prec(-1, seq($._concat, choice($.primary_expression_, $.special_character_)))),
           optional(seq($._concat, "$"))
         )
       ),
 
-    _special_character: ($) => token(prec(-1, choice("{", "}", "[", "]"))),
+    special_character_: ($) => token(prec(-1, choice("{", "}", "[", "]"))),
 
     string: ($) =>
       seq(
@@ -445,9 +445,9 @@ module.exports = grammar({
         "$",
         choice(
           $._simple_variable_name,
-          $._special_variable_name,
-          alias("!", $.special_variable_name),
-          alias("#", $.special_variable_name)
+          field("special_variable_name1", $._special_variable_name),
+          alias("!", $.special_variable_name2),
+          alias("#", $.special_variable_name3)
         )
       ),
 
@@ -461,7 +461,8 @@ module.exports = grammar({
           choice(
             seq($.variable_name, "=", optional($._literal)),
             seq(
-              choice($.subscript, $._simple_variable_name, $._special_variable_name),
+              choice($.subscript, $._simple_variable_name, 
+                field("special_variable_name", $._special_variable_name)),
               optional(seq(token(prec(1, "/")), optional($.regex))),
               repeat(choice($._literal, ":", ":?", "=", ":-", "%", "-", "#"))
             )
@@ -484,7 +485,7 @@ module.exports = grammar({
     _simple_variable_name: ($) => alias(/\w+/, $.variable_name),
 
     _special_variable_name: ($) =>
-      alias(choice("*", "@", "?", "-", "$", "0", "_"), $.special_variable_name),
+      choice("*", "@", "?", "-", "$", "0", "_"),
 
     word: ($) => token(repeat1(choice(noneOf(...SPECIAL_CHARACTERS), seq("\\", noneOf("\\s"))))),
 
