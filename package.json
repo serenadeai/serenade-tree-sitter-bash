@@ -18,6 +18,7 @@
     "tree-sitter-cli": "^0.19.1"
   },
   "scripts": {
+    "build": "tree-sitter generate",
     "install": "prebuild-install || node-gyp rebuild",
     "pre-build": "prebuild --all --strip --verbose",
     "pre-build:upload": "prebuild --upload-all",
@@ -33,5 +34,12 @@
         "bash"
       ]
     }
-  ]
+  ],
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "arrowParens": "avoid",
+    "singleQuote": true
+  }
 }
